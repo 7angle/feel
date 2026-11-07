@@ -18,3 +18,6 @@ MEMORY.md
 video/
 *.jks
 *.keystore
+Keys/
+*.p8
+*.p12
