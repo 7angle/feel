@@ -1,11 +1,16 @@
 // Feel Player
 // Copyright (C) 2026 7 Angle. All rights reserved.
 
+import FeedbackJar
 import SwiftUI
 
 @main
 struct FeelMacApp: App {
     @State private var model = AppModel()
+
+    init() {
+        FeedbackJar.configure(widgetId: "cmw66df8p003wcwp04bsof78i")
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -15,7 +20,13 @@ struct FeelMacApp: App {
         }
         .defaultSize(width: 1360, height: 860)
         .windowToolbarStyle(.unified(showsTitle: true))
+        Window("Send Feedback", id: FeedbackCommand.windowID) {
+            FeedbackView()
+                .frame(width: 420)
+        }
+        .windowResizability(.contentSize)
         .commands {
+            CommandGroup(after: .help) { FeedbackCommand() }
             CommandGroup(replacing: .newItem) {
                 Button("New Project") { model.newProject() }.keyboardShortcut("n")
                 Button("Open…") { model.openProjectPanel() }.keyboardShortcut("o")

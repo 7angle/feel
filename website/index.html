@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feel — Haptics for video</title>
+  <meta name="description" content="Make haptics for a video. Edit on a Mac. Feel on a phone.">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:title" content="Feel — Haptics for video">
+  <meta property="og:description" content="Make haptics for a video. Edit on a Mac. Feel on a phone.">
+  <meta property="og:image" content="https://mcnaveen.github.io/feel/assets/editor.jpg">
+  <meta property="og:url" content="https://mcnaveen.github.io/feel/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="nav-title" href="#top">Feel</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#apps">Apps</a>
+      <a href="#export">Export</a>
+      <a href="#faq">FAQ</a>
+      <a class="nav-btn" href="https://github.com/mcnaveen/feel">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- hero -->
+  <section id="overview" class="hero">
+    <p class="eyebrow">Beta</p>
+    <h1>Feel the video.</h1>
+    <p class="sub">Make haptics for a video.<br>Edit on a Mac. Feel on a phone.</p>
+    <p class="links">
+      <span class="btn soon" aria-disabled="true">Coming soon</span>
+      <a class="link" href="https://github.com/mcnaveen/feel">View source</a>
+    </p>
+    <figure class="hero-shot" id="heroShot">
+      <div class="glow" id="glow" aria-hidden="true"></div>
+      <img src="assets/editor.jpg" alt="Feel Editor on a Mac. A video, a timeline, and haptic events." width="2400" height="1526" fetchpriority="high">
+    </figure>
+  </section>
+
+  <!-- how it works -->
+  <section id="how" class="how">
+    <h2 class="section-title reveal">Three steps.</h2>
+    <p class="sub reveal">Make haptics for a video in a few minutes.</p>
+    <ol class="steps">
+      <li class="reveal">
+        <span class="num">1</span>
+        <h3>Import a video.</h3>
+        <p>Start Feel Editor. Import a video. Feel Editor keeps a reference to the file. It does not copy the video.</p>
+      </li>
+      <li class="reveal">
+        <span class="num">2</span>
+        <h3>Pair your phone.</h3>
+        <p>Put the Mac and the phone on the same network. Open the phone app. Scan the QR code in Feel Editor.</p>
+      </li>
+      <li class="reveal">
+        <span class="num">3</span>
+        <h3>Edit and feel.</h3>
+        <p>Edit the timeline. The phone plays the haptics in sync with the video. Then export.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- feature tiles -->
+  <section id="features" class="tiles">
+    <h2 class="section-title reveal">Feel what you edit.</h2>
+
+    <div class="tile tile-dark tile-wide reveal">
+      <div class="tile-copy">
+        <h3>Haptic timeline.</h3>
+        <p>Edit haptic events on a timeline. The timeline aligns with the video.</p>
+      </div>
+      <div class="crop" role="img" aria-label="The Feel Editor timeline. Video frames, a waveform, and orange haptic events."></div>
+    </div>
+
+    <div class="tile reveal">
+      <div class="tile-copy">
+        <h3>Live preview.</h3>
+        <p>Connect phones to the Mac. Feel the haptics while the video plays.</p>
+      </div>
+      <img class="tile-img" src="assets/iphone.jpg" alt="Feel on iPhone. A video with a haptic waveform under it." width="1400" height="647" loading="lazy">
+    </div>
+
+    <div class="tile reveal">
+      <div class="tile-copy">
+        <h3>Suggestions.</h3>
+        <p>The app suggests haptics from the video and audio. Add a pattern from the preset list.</p>
+      </div>
+      <div class="tile-ui" aria-hidden="true"><span class="pill">Auto from Audio</span><span class="pill pill-2">Presets</span></div>
+    </div>
+  </section>
+
+  <!-- apps -->
+  <section id="apps" class="apps">
+    <h2 class="section-title reveal">One project. Three apps.</h2>
+    <div class="apps-grid">
+
+      <article class="app reveal">
+        <img src="assets/icon-editor.png" alt="" width="80" height="80">
+        <h3>Feel Editor</h3>
+        <p>Edit, analyze, and export haptics.</p>
+        <span class="req">macOS 14 or later</span>
+        <a class="link" href="https://github.com/mcnaveen/feel">See the source</a>
+      </article>
+
+      <article class="app reveal">
+        <img src="assets/icon-player.png" alt="" width="80" height="80">
+        <h3>Feel for iPhone</h3>
+        <p>Plays haptics with Core Haptics.</p>
+        <span class="req">iOS 17 or later</span>
+        <a class="link" href="https://github.com/mcnaveen/feel">See the source</a>
+      </article>
+
+      <article class="app reveal">
+        <img src="assets/icon-player.png" alt="" width="80" height="80">
+        <h3>Feel for Android</h3>
+        <p>Plays haptics with the device vibrator.</p>
+        <span class="req">Android 8.0 or later</span>
+        <a class="link" href="https://github.com/mcnaveen/feel">See the source</a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- export -->
+  <section id="export" class="export">
+    <h2 class="section-title reveal">Use it in your app.</h2>
+    <p class="sub reveal">Export your haptics. Add them to your own iOS or Android app.<br>You do not install a library.</p>
+
+    <div class="formats-table reveal" role="table" aria-label="Export formats">
+      <div class="row head" role="row"><span role="columnheader">Format</span><span role="columnheader">Files</span><span role="columnheader">Platform</span><span role="columnheader">Use</span></div>
+      <div class="row" role="row"><span role="cell"><b>AHAP</b></span><span role="cell"><code>&lt;project&gt;.ahap</code></span><span role="cell">iOS</span><span role="cell">Play the pattern with Core Haptics. No video sync.</span></div>
+      <div class="row" role="row"><span role="cell"><b>JSON</b></span><span role="cell"><code>&lt;project&gt;.json</code></span><span role="cell">iOS, Android</span><span role="cell">Open the file in Feel for iPhone or Feel for Android.</span></div>
+      <div class="row" role="row"><span role="cell"><b>Swift</b></span><span role="cell"><code>FeelHapticVideoSync.swift</code></span><span role="cell">iOS 16 or later</span><span role="cell">Sync haptics with <code>AVPlayer</code>.</span></div>
+      <div class="row" role="row"><span role="cell"><b>Kotlin</b></span><span role="cell"><code>FeelHapticVideoSync.kt</code></span><span role="cell">Android 8.0 or later</span><span role="cell">Sync haptics with a Media3 player.</span></div>
+    </div>
+
+    <div class="code reveal" data-tabs>
+      <div class="code-tabs" role="tablist" aria-label="Code language">
+        <button role="tab" aria-selected="true" aria-controls="code-swift" id="tab-swift">Swift</button>
+        <button role="tab" aria-selected="false" aria-controls="code-kotlin" id="tab-kotlin">Kotlin</button>
+      </div>
+      <pre id="code-swift" role="tabpanel" aria-labelledby="tab-swift"><code><span class="c">// Add FeelHapticVideoSync.swift and &lt;project&gt;.ahap to your target.</span>
+<span class="k">let</span> player = <span class="t">AVPlayer</span>(url: videoURL)
+<span class="k">let</span> haptics = <span class="k">try</span> <span class="t">HapticVideoSync</span>(player: player, resource: <span class="s">"&lt;project&gt;"</span>)
+player.<span class="f">play</span>()
+
+<span class="c">// Keep a strong reference to `haptics` while the video plays.</span></code></pre>
+      <pre id="code-kotlin" role="tabpanel" aria-labelledby="tab-kotlin" hidden><code><span class="c">// Copy FeelHapticVideoSync.kt to your source folder.</span>
+<span class="c">// Copy &lt;project&gt;.json to app/src/main/assets/.</span>
+<span class="k">val</span> player = <span class="t">ExoPlayer</span>.<span class="t">Builder</span>(<span class="k">this</span>).<span class="f">build</span>()
+<span class="k">val</span> haptics = <span class="t">HapticVideoSync</span>.<span class="f">fromAsset</span>(<span class="k">this</span>, player, <span class="s">"&lt;project&gt;.json"</span>)
+
+player.<span class="f">setMediaItem</span>(<span class="t">MediaItem</span>.<span class="f">fromUri</span>(videoUri))
+player.<span class="f">prepare</span>()
+player.<span class="f">play</span>()
+
+<span class="c">// When you close the screen:</span>
+haptics.<span class="f">release</span>()
+player.<span class="f">release</span>()</code></pre>
+    </div>
+    <p class="note reveal">The haptics follow play, pause, seek, and speed changes.</p>
+  </section>
+
+  <!-- security -->
+  <section id="privacy" class="trust minor">
+    <h2 class="section-title reveal">Private by design.</h2>
+    <div class="trust-grid">
+      <article class="reveal">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16.4964 9V6.5C16.4964 4.01472 14.4817 2 11.9964 2C9.51112 2 7.4964 4.01472 7.4964 6.5V9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M13.4958 9H10.4964C8.16158 9 6.99417 9 6.11049 9.47237C5.41275 9.84535 4.84128 10.4169 4.46837 11.1146C3.99608 11.9984 3.99619 13.1658 3.99641 15.5006C3.99662 17.835 3.99673 19.0023 4.46907 19.8858C4.84203 20.5835 5.41347 21.1548 6.11115 21.5277C6.99475 22 8.16197 22 10.4964 22H13.4958C15.8304 22 16.9978 22 17.8814 21.5277C18.5791 21.1548 19.1506 20.5833 19.5235 19.8856C19.9958 19.0019 19.9958 17.8346 19.9958 15.5C19.9958 13.1654 19.9958 11.9981 19.5235 11.1144C19.1506 10.4167 18.5791 9.84525 17.8814 9.47231C16.9978 9 15.8304 9 13.4958 9Z" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/><circle cx="11.9964" cy="15.5" r="2" stroke="currentColor" stroke-width="1.5"/></svg>
+        <h3>Encrypted link.</h3>
+        <p>A pre-shared key (TLS-PSK) encrypts the connection between your devices. The QR code contains the pairing code.</p>
+      </article>
+      <article class="reveal">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 8L13 8" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/><path d="M2 11C2 7.70017 2 6.05025 3.02513 5.02513C4.05025 4 5.70017 4 9 4H10C13.2998 4 14.9497 4 15.9749 5.02513C17 6.05025 17 7.70017 17 11V13C17 16.2998 17 17.9497 15.9749 18.9749C14.9497 20 13.2998 20 10 20H9C5.70017 20 4.05025 20 3.02513 18.9749C2 17.9497 2 16.2998 2 13V11Z" stroke="currentColor" stroke-width="1.5"/><path d="M17 8.90585L17.1259 8.80196C19.2417 7.05623 20.2996 6.18336 21.1498 6.60482C22 7.02628 22 8.42355 22 11.2181V12.7819C22 15.5765 22 16.9737 21.1498 17.3952C20.2996 17.8166 19.2417 16.9438 17.1259 15.198L17 15.0941" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/></svg>
+        <h3>Your video stays put.</h3>
+        <p>The apps keep a reference to each video. They do not copy it.</p>
+      </article>
+      <article class="reveal">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.43385 6.51953C4.22009 7.89049 2.93281 9.86457 2.31858 11.0339C2.10621 11.4382 2.00003 11.6403 2 12.0082C1.99997 12.3761 2.10584 12.5777 2.3176 12.981C3.32862 14.9066 6.16702 19.0195 11.9669 19.0195C14.2454 19.0195 16.0669 18.3848 17.5 17.4972" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M9.87868 9.87868C9.33579 10.4216 9 11.1716 9 12C9 13.6569 10.3431 15 12 15C12.8284 15 13.5784 14.6642 14.1213 14.1213" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/><path d="M2 2L22 22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M10 5.14847C10.5934 5.05255 11.224 5 11.8936 5C17.7747 5 20.6528 9.05385 21.6779 10.9517C21.8927 11.3492 22 11.548 22 11.9106C22 12.2733 21.8921 12.4727 21.6765 12.8717C21.3678 13.4428 20.8916 14.2085 20.2167 15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg>
+        <h3>No data collection.</h3>
+        <p>The apps do not collect your data. Feedback is optional and goes out only when you send it. Read the <a class="link" href="https://github.com/mcnaveen/feel/blob/main/PRIVACY.md">privacy policy</a>.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- specs -->
+  <section id="specs" class="specs minor">
+    <h2 class="section-title reveal">Requirements.</h2>
+    <dl class="spec-list reveal">
+      <div><dt>Feel Editor</dt><dd>macOS 14 or later</dd></div>
+      <div><dt>Feel Player</dt><dd>macOS 14 or later</dd></div>
+      <div><dt>Feel for iPhone</dt><dd>iOS 17 or later. Uses Core Haptics.</dd></div>
+      <div><dt>Feel for Android</dt><dd>Android 8.0 (API 26) or later. Needs a vibration motor.</dd></div>
+      <div><dt>Tested on</dt><dd>Pixel 6a, a physical iPhone, and many phones at the same time.</dd></div>
+      <div><dt>Shared code</dt><dd>The Apple apps use one Swift package, FeelCore. It has the models, timebase, presets, export engine, and network protocol.</dd></div>
+    </dl>
+  </section>
+
+  <!-- faq -->
+  <section id="faq" class="faq minor">
+    <h2 class="section-title reveal">Questions.</h2>
+    <div class="faq-list reveal">
+      <details>
+        <summary>Do I need a Mac?</summary>
+        <p>No. Open the phone app, select a video, and feel the haptics. You need the Mac to edit the haptics.</p>
+      </details>
+      <details>
+        <summary>What do I need for live preview?</summary>
+        <p>Put the Mac and the phone on the same network. Scan the QR code in Feel Editor with the phone app.</p>
+      </details>
+      <details>
+        <summary>Can I connect more than one phone?</summary>
+        <p>Yes. Many phones can connect at the same time. This was tested.</p>
+      </details>
+      <details>
+        <summary>What happens if my export folder has old files?</summary>
+        <p>Export replaces files that have the same name. Export to an empty folder if you must keep the old files.</p>
+      </details>
+      <details>
+        <summary>When does export stop?</summary>
+        <p>Export stops if the project has no events, or if an event has an invalid number. Export shows a warning, and continues, if an event is outside the video, an event has zero intensity, or the project has no video.</p>
+      </details>
+      <details>
+        <summary>Why are the Android haptics weak or off?</summary>
+        <p>The <b>Media vibration</b> setting on the device controls the strength. If it is off, the haptics do not operate. On a Pixel, find it in Settings &gt; Sound &amp; vibration &gt; Vibration &amp; haptics.</p>
+      </details>
+      <details>
+        <summary>Why do the Android haptics stop for a moment?</summary>
+        <p>A system vibration, such as a touch vibration, can stop the haptics for a maximum of 1.5 seconds. The haptics then start again automatically.</p>
+      </details>
+      <details>
+        <summary>Can I build the apps myself?</summary>
+        <p>Yes. The source is on GitHub. Apple apps need macOS 14, Xcode, and XcodeGen. The Android app needs JDK 17 and the Android SDK. See <a class="link" href="https://github.com/mcnaveen/feel/blob/main/docs/build.md">the build guide</a>.</p>
+      </details>
+      <details>
+        <summary>What is the license?</summary>
+        <p>AGPL-3.0-or-later. The names, icons, and bundle IDs belong to 7 Angle. If you fork the project, use different ones.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- close -->
+  <section class="close">
+    <h2 class="section-title reveal">Free and open source.</h2>
+    <p class="sub reveal">AGPL-3.0. The apps do not collect your data.</p>
+    <p class="links reveal">
+      <span class="btn soon" aria-disabled="true">Coming soon</span>
+      <a class="link" href="https://github.com/mcnaveen/feel">View on GitHub</a>
+    </p>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <p>Feel is in beta. “Feel”, “Feel Editor”, and “Feel Player” names, icons, and bundle IDs belong to 7 Angle.</p>
+    <p class="foot-row">
+      <span>© 7 Angle</span>
+      <span>
+        <a href="https://github.com/mcnaveen/feel/blob/main/PRIVACY.md">Privacy Policy</a>
+        <a href="https://github.com/mcnaveen/feel/blob/main/LICENSE">License</a>
+        <a href="https://github.com/mcnaveen/feel">GitHub</a>
+      </span>
+    </p>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+<script src="https://cdn.feedbackjar.com/sdk.js"></script>
+<script>
+  window.fj.init('cmw66df8p003wcwp04bsof78i');
+</script>
+</body>
+</html>

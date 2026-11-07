@@ -8,6 +8,9 @@ options:
 packages:
   FeelCore:
     path: Packages/FeelCore
+  FeedbackJar:
+    url: https://github.com/feedbackjar/swift-sdk
+    from: 1.4.6
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -19,9 +22,10 @@ targets:
   FeelEditor:
     type: application
     platform: macOS
-    sources: [Apps/FeelMac/Sources, Apps/Shared/Mac, Apps/Shared/Privacy, Icons/Editor.icon]
+    sources: [Apps/FeelMac/Sources, Apps/Shared/Mac, Apps/FeelMac/Resources/PrivacyInfo.xcprivacy, Icons/Editor.icon]
     dependencies:
       - package: FeelCore
+      - package: FeedbackJar
     info:
       path: Apps/FeelMac/Resources/Info.plist
       properties:
@@ -95,9 +99,10 @@ targets:
   FeelPhone:
     type: application
     platform: iOS
-    sources: [Apps/FeelPhone/Sources, Apps/Shared/Privacy, Icon.icon]
+    sources: [Apps/FeelPhone/Sources, Apps/FeelPhone/Resources/PrivacyInfo.xcprivacy, Icon.icon]
     dependencies:
       - package: FeelCore
+      - package: FeedbackJar
     info:
       path: Apps/FeelPhone/Resources/Info.plist
       properties:

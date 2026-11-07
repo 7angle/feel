@@ -76,7 +76,7 @@ The Apple apps share the Swift package in `Packages/FeelCore`. This package cont
 
 - A pre-shared key (TLS-PSK) encrypts the connection between the devices. The QR code contains the pairing code.
 - The apps keep a reference to each video. They do not copy the video.
-- The apps do not collect your data. For more data, refer to the [privacy policy](PRIVACY.md).
+- The apps do not collect your data. Feedback is optional. It goes to FeedbackJar only when you send it. For more data, refer to the [privacy policy](PRIVACY.md).
 
 ## Contributing
 

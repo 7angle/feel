@@ -46,6 +46,7 @@ dependencies {
     implementation("org.bouncycastle:bctls-jdk18on:1.80")
     implementation("org.bouncycastle:bcprov-jdk18on:1.80")
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
+    implementation("com.feedbackjar:sdk:1.7.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")
 }
