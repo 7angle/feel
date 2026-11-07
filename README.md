@@ -1,5 +1,7 @@
 # Feel Player
 
+![Feel Mac editor](Assets/8ePmHvM4khKKNVid006712@2x.jpg)
+
 Design haptics that match a video. Edit on Mac, feel it on your phone.
 
 - **Mac editor** (SwiftUI): import video, edit a haptic timeline, use presets, auto-suggest haptics from video and audio, export.
