@@ -10,11 +10,16 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
     env:
       VERSION_NAME: ${{ github.ref_type == 'tag' && github.ref_name || 'mac-v0.0.0-dev' }}
     steps:
       - uses: actions/checkout@v4
+      - name: Select newest Xcode
+        run: |
+          X=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$X"
+          xcodebuild -version
       - name: Install xcodegen
         run: brew install xcodegen
       - name: Generate project
