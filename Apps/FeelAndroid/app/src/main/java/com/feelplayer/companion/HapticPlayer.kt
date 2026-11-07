@@ -33,17 +33,18 @@ class HapticPlayer(context: Context) {
     var lastItems = 0
         private set
 
-    /** Events in [from, to). Pattern time 0 = `from`. Starts after `delay` seconds. */
-    fun play(events: List<HapticEvent>, from: Double, to: Double, delay: Double) {
-        stop()
+    /**
+     * Events in [from, to). Pattern time 0 = `from`. Starts after `delay` seconds.
+     * With `continuing`, the current effect plays until the new one replaces it, so no haptic is lost at the change.
+     */
+    fun play(events: List<HapticEvent>, from: Double, to: Double, delay: Double, continuing: Boolean = false) {
+        if (continuing) handler.removeCallbacksAndMessages(null) else stop()
         val wave = HapticWaveform.build(events, from, to) ?: return
         val effect = if (hasAmplitudeControl) {
             VibrationEffect.createWaveform(wave.timings, wave.amplitudes, -1)
         } else {
             // No amplitude control: on where the amplitude is not zero.
-            val timings = LongArray(wave.timings.size + 1)
-            for (i in wave.timings.indices) timings[i + 1] = wave.timings[i]
-            VibrationEffect.createWaveform(timings, -1)
+            VibrationEffect.createWaveform(HapticWaveform.onOffTimings(wave), -1)
         }
         lastItems = wave.timings.size
         val run = Runnable {

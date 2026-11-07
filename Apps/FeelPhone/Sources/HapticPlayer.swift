@@ -65,18 +65,28 @@ final class HapticPlayer {
 
     /// Engine reset or stopped by system. Start again, then ask caller to reschedule.
     func restart() {
-        guard let engine else { return prepare() }
+        guard engine != nil else { return prepare() }
+        if startEngine() { onRestart?() }
+    }
+
+    /// Does not call `onRestart`. `play` uses this, because a reschedule inside `play` would play every haptic twice.
+    private func startEngine() -> Bool {
+        guard let engine else {
+            prepare()
+            return isReady
+        }
         do {
             try engine.start()
             isReady = true
             restarts += 1
             report()
             onReadyChange?(true, nil)
-            onRestart?()
+            return true
         } catch {
             self.engine = nil
             isReady = false
             onReadyChange?(false, "Cannot restart haptics: \(error.localizedDescription)")
+            return false
         }
     }
 
@@ -96,7 +106,7 @@ final class HapticPlayer {
     /// Schedule events in timeline window [from, to). Pattern time 0 = `from`. Starts after `delay` seconds.
     func play(events: [HapticEvent], from: TimelineTime = 0, to: TimelineTime? = nil, delay: TimeInterval, replacing: Bool = true) {
         if replacing { stopAll() }
-        if !isReady { restart() }
+        if !isReady { _ = startEngine() }
         guard let engine, isReady else { return }
         // Fixed before the build, so build time does not make the haptics late.
         let at = delay <= 0 ? CHHapticTimeImmediate : engine.currentTime + delay

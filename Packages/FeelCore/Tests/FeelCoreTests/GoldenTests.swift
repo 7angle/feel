@@ -51,6 +51,68 @@ final class GoldenTests: XCTestCase {
         return s
     }
 
+    private struct Feature: Codable {
+        var t, luma, histDiff, motion, shiftX, shiftY, bright: Double
+    }
+
+    private struct AutoRun: Codable {
+        var sensitivity: Double
+        var events: [HapticEvent]
+    }
+
+    private struct AutoGolden: Codable {
+        var features: [Feature]
+        var audio: [Float]
+        var runs: [AutoRun]
+    }
+
+    /// 30 s at 15 samples per second, with one of each moment the suggester knows.
+    static func autoFeatures() -> [FrameFeature] {
+        var f = (0..<450).map { i in
+            FrameFeature(t: Double(i) / 15, luma: 0.35, histDiff: 0.01, motion: 0.01 + 0.002 * Double(i % 3))
+        }
+        f[75].motion = 0.2 // impact, on the bass hit at 5 s
+        f[120].histDiff = 0.9 // scene cut at 8 s
+        f[120].motion = 0.25
+        for i in 150..<188 { f[i].motion = 0.1 } // fast movement
+        for i in 255..<285 { // camera shake
+            f[i].shiftX = i % 2 == 0 ? 3 : -3
+            f[i].motion = 0.015
+        }
+        for i in 300..<330 { f[i].motion = 0.1 } // high action, in the bass swell
+        for i in 375..<379 { // explosion
+            f[i].luma = 0.8
+            f[i].bright = 0.4
+            f[i].motion = 0.3
+        }
+        return f
+    }
+
+    /// Run: FEEL_GOLDEN_DIR=Apps/FeelAndroid/app/src/test/resources swift test --filter GoldenTests/testWriteAutoGolden
+    func testWriteAutoGolden() throws {
+        let signal = Self.signal()
+        let hop = Int(SpectrumAnalyzer.sampleRate / AudioEnvelope.bucketsPerSecond)
+        let audio = stride(from: 0, to: signal.count - hop + 1, by: hop).map { start in
+            signal[start..<start + hop].reduce(Float(0)) { max($0, abs($1)) }
+        }
+        let features = Self.autoFeatures()
+        let input = AnalysisInput(features: features, audio: audio, duration: 30)
+        let kinds = Set(HeuristicSuggester().suggest(input, sensitivity: 0.5).map(\.kind))
+        XCTAssertEqual(kinds, Set(SuggestionKind.allCases))
+        guard let dir = ProcessInfo.processInfo.environment["FEEL_GOLDEN_DIR"] else {
+            throw XCTSkip("Set FEEL_GOLDEN_DIR to write the Android golden files.")
+        }
+        let sp = SpectrumAnalyzer.analyze(signal)
+        let golden = AutoGolden(
+            features: features.map { Feature(t: $0.t, luma: $0.luma, histDiff: $0.histDiff, motion: $0.motion, shiftX: $0.shiftX, shiftY: $0.shiftY, bright: $0.bright) },
+            audio: audio,
+            runs: [0.0, 0.5, 1.0].map { AutoRun(sensitivity: $0, events: AutoHaptics.generate(spectrum: sp, input: input, sensitivity: $0)) }
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        try encoder.encode(golden).write(to: URL(fileURLWithPath: dir, isDirectory: true).appendingPathComponent("auto-golden.json"))
+    }
+
     func testWriteGolden() throws {
         guard let dir = ProcessInfo.processInfo.environment["FEEL_GOLDEN_DIR"] else {
             throw XCTSkip("Set FEEL_GOLDEN_DIR to write the Android golden files.")

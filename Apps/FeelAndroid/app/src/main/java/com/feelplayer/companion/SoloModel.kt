@@ -67,7 +67,7 @@ class SoloModel(private val context: Context, private val haptics: HapticPlayer)
             main.postDelayed(this, 33)
         }
     }
-    private val nextWindow = Runnable { schedule() }
+    private val nextWindow = Runnable { schedule(continuing = true) }
 
     private val listener = object : Player.Listener {
         override fun onTracksChanged(tracks: Tracks) {
@@ -227,18 +227,39 @@ class SoloModel(private val context: Context, private val haptics: HapticPlayer)
         thread(name = "feel-audio", isDaemon = true, priority = Thread.NORM_PRIORITY - 1) {
             val began = SystemClock.elapsedRealtime()
             val spectrum = AudioExtractor.extract(context, uri) { analysis != id }
-            val found = spectrum?.let { AudioHaptics.generate(it, 0.5) }
-            Log.i("Feel", "audio haptics: ${found?.size} events from ${spectrum?.count} frames in ${SystemClock.elapsedRealtime() - began} ms")
+            if (spectrum == null) {
+                main.post {
+                    if (analysis == id) {
+                        isMaking = false
+                        message = "Cannot read the sound of this video."
+                    }
+                }
+                return@thread
+            }
+            // The sound is fast to read, so its haptics are ready first. The picture takes longer.
+            val fromSound = AudioHaptics.generate(spectrum, 0.5)
+            Log.i("Feel", "audio haptics: ${fromSound.size} events from ${spectrum.count} frames in ${SystemClock.elapsedRealtime() - began} ms")
+            if (fromSound.isNotEmpty()) {
+                main.post {
+                    if (analysis == id) {
+                        isMaking = false
+                        useEvents(fromSound)
+                        warning = null
+                    }
+                }
+            }
+            val features = FrameExtractor.extract(context, uri) { analysis != id }
+            // When the picture cannot be read, the haptics from the sound stay.
+            val found = features?.let { AutoHaptics.generate(spectrum, it, 0.5) }.orEmpty()
+            Log.i("Feel", "auto haptics: ${found.size} events from ${features?.size} video samples in ${SystemClock.elapsedRealtime() - began} ms")
             main.post {
                 if (analysis != id) return@post
                 isMaking = false
-                when {
-                    spectrum == null -> message = "Cannot read the sound of this video."
-                    found.isNullOrEmpty() -> message = "No clear hits in the sound."
-                    else -> {
-                        useEvents(found)
-                        warning = null
-                    }
+                if (found.isNotEmpty()) {
+                    useEvents(found)
+                    warning = null
+                } else if (fromSound.isEmpty()) {
+                    message = "No clear hits in this video."
                 }
             }
         }
@@ -267,12 +288,12 @@ class SoloModel(private val context: Context, private val haptics: HapticPlayer)
     }
 
     /** Haptics for the next window, from where the player really is. This also corrects drift. */
-    private fun schedule() {
+    private fun schedule(continuing: Boolean = false) {
         main.removeCallbacks(nextWindow)
         val p = player ?: return
         if (!p.isPlaying) return
         val start = p.currentPosition / 1000.0 + LEAD
-        haptics.play(events, start, start + WINDOW, LEAD)
+        haptics.play(events, start, start + WINDOW, LEAD, continuing)
         main.postDelayed(nextWindow, ((WINDOW - 1.5) * 1000).toLong())
     }
 
@@ -296,8 +317,8 @@ class SoloModel(private val context: Context, private val haptics: HapticPlayer)
 
     private companion object {
         val VIDEO_EXTENSIONS = setOf("mp4", "mov", "m4v", "mkv", "webm")
-        /** Seconds of pattern per window, as in the companion. */
-        const val WINDOW = 10.0
+        /** Seconds of pattern per window, as in the companion. Short, so haptics return soon after a system vibration. */
+        const val WINDOW = 3.0
         /** Time for the vibrator call to land. */
         const val LEAD = 0.03
     }

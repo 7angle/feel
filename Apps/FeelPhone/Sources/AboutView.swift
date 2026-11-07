@@ -16,6 +16,13 @@ struct AboutView: View {
                     Text("The camera scans the QR code on your Mac. The image is not saved or sent.")
                     Text("The local network link goes only to your own Mac. It is encrypted.")
                 }
+                Section("License") {
+                    Text("Copyright © 2026 7 Angle.")
+                    Text("Feel is free software under the GNU AGPL 3.0 or later.")
+                    Text("The AGPL does not apply to the Feel names and icons. All rights reserved.")
+                    Link("View the source code on GitHub", destination: URL(string: "https://github.com/mcnaveen/feel")!)
+                    Link("Read the license", destination: URL(string: "https://github.com/mcnaveen/feel/blob/main/LICENSE")!)
+                }
                 Section("Version") {
                     Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")
                 }

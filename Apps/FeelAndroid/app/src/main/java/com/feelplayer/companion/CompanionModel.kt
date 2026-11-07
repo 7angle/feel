@@ -69,11 +69,12 @@ class CompanionModel(private val context: Context) : PlayerTransport {
     private var transport: Transport? = null
     private var pingThread: Thread? = null
     private var nextPing = 0
-    private val window = 10.0
+    /** Short, so haptics return soon after a system vibration replaces the window. */
+    private val window = 3.0
 
     private data class Transport(val mediaTime: Double, val hostTime: Double, val advance: Double)
 
-    private val windowRunnable = Runnable { reschedule() }
+    private val windowRunnable = Runnable { reschedule(continuing = true) }
     private val uiRunnable = object : Runnable {
         override fun run() {
             val t = transport
@@ -269,12 +270,12 @@ class CompanionModel(private val context: Context) : PlayerTransport {
     }
 
     /** Cancel and rebuild the haptics for the next window from the current transport and clock. */
-    private fun reschedule() {
+    private fun reschedule(continuing: Boolean = false) {
         main.removeCallbacks(windowRunnable)
         val t = transport ?: return
         val off = clock.offset ?: return
         val plan = PlaybackPlan.make(t.mediaTime, t.hostTime, t.advance, off, SharedClock.now())
-        haptics.play(events, plan.mediaStart, plan.mediaStart + window, plan.delay)
+        haptics.play(events, plan.mediaStart, plan.mediaStart + window, plan.delay, continuing)
         // Next window starts shortly before this one ends.
         main.postDelayed(windowRunnable, ((window - 1.5 + plan.delay) * 1000).toLong())
     }

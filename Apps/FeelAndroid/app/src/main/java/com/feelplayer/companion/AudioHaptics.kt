@@ -179,7 +179,7 @@ object AudioHaptics {
         }
     }
 
-    private fun runs(mask: BooleanArray, minLen: Int, maxGap: Int): List<IntRange> {
+    internal fun runs(mask: BooleanArray, minLen: Int, maxGap: Int): List<IntRange> {
         val out = ArrayList<IntRange>()
         var start = -1
         var lastTrue = 0

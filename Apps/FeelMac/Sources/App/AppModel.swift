@@ -64,8 +64,10 @@ final class AppModel: DeviceHost {
     private(set) var activeVideoURL: URL?
     @ObservationIgnored var analysisInput: AnalysisInput?
     private(set) var isAutoRunning = false
+    private(set) var autoProgress = 0.0
     @ObservationIgnored var autoTask: Task<Void, Never>?
     @ObservationIgnored var spectrumCache: (url: URL, spectrum: AudioSpectrum)?
+    @ObservationIgnored var autoInputCache: (url: URL, input: AnalysisInput)?
     @ObservationIgnored var analysisTask: Task<Void, Never>?
     @ObservationIgnored let analyzer = VideoAnalyzer()
     @ObservationIgnored var auditionTask: Task<Void, Never>?
@@ -351,12 +353,20 @@ final class AppModel: DeviceHost {
         session.sendDuration(duration)
     }
 
-    func setAutoRunning(_ on: Bool) { isAutoRunning = on }
+    func setAutoRunning(_ on: Bool) {
+        isAutoRunning = on
+        autoProgress = 0
+    }
+
+    func setAutoProgress(_ p: Double) {
+        if isAutoRunning { autoProgress = p }
+    }
 
     private func releaseVideo() {
         autoTask?.cancel()
         isAutoRunning = false
         spectrumCache = nil
+        autoInputCache = nil
         activeVideoURL = nil
         clearSuggestions()
         video.close()

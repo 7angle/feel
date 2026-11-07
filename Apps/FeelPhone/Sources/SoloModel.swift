@@ -40,6 +40,16 @@ final class SoloModel {
 
     var hasVideo: Bool { player != nil }
 
+    init() {
+        haptics.onRestart = { [weak self] in self?.hapticsRestarted() }
+    }
+
+    /// A restarted engine lost its patterns. While a seek is pending, the rate is 0 and `play` schedules them.
+    private func hapticsRestarted() {
+        guard isPlaying, let p = player, p.rate > 0 else { return }
+        reschedule()
+    }
+
     private func updateGraph() {
         hapticGraph = HapticGraph.levels(events: events, duration: duration)
     }
@@ -137,6 +147,9 @@ final class SoloModel {
 
     func close() {
         stop()
+        // Dropping the reference does not stop it. A player something else still holds plays on.
+        player?.pause()
+        player?.replaceCurrentItem(with: nil)
         makeTask?.cancel()
         isMaking = false
         if let endObserver { NotificationCenter.default.removeObserver(endObserver) }
@@ -184,6 +197,8 @@ final class SoloModel {
     }
 
     func clearHaptics() {
+        makeTask?.cancel()
+        isMaking = false
         setEvents([])
         warning = nil
     }
@@ -192,16 +207,41 @@ final class SoloModel {
         guard let url = videoURL, !isMaking else { return }
         makeTask?.cancel()
         isMaking = true
+        let length = duration
         makeTask = Task { [weak self] in
             let spectrum = await Task.detached(priority: .userInitiated) { await AudioSpectrumExtractor.extract(url: url) }.value
             guard !Task.isCancelled, let self else { return }
+            guard let spectrum else {
+                self.isMaking = false
+                self.message = "Cannot read the sound of this video."
+                return
+            }
+            // The sound is fast to read, so its haptics are ready first. The picture takes longer.
+            let fromSound = AudioHaptics.generate(spectrum: spectrum, sensitivity: 0.5)
+            if !fromSound.isEmpty {
+                self.setEvents(fromSound)
+                self.isMaking = false
+                self.warning = nil
+            }
+            let work = Task.detached(priority: .utility) { try await VideoAnalyzer().measure(url: url, duration: length) }
+            let input = try? await withTaskCancellationHandler { try await work.value } onCancel: { work.cancel() }
+            guard !Task.isCancelled else { return }
             self.isMaking = false
-            guard let spectrum else { self.message = "Cannot read the sound of this video."; return }
-            let found = AudioHaptics.generate(spectrum: spectrum, sensitivity: 0.5)
-            guard !found.isEmpty else { self.message = "No clear hits in the sound."; return }
-            self.setEvents(found)
-            self.warning = nil
+            // When the picture cannot be read, the haptics from the sound stay.
+            let found = input.map { AutoHaptics.generate(spectrum: spectrum, input: $0, sensitivity: 0.5) } ?? []
+            if !found.isEmpty {
+                self.replaceEvents(found)
+                self.warning = nil
+            } else if fromSound.isEmpty {
+                self.message = "No clear hits in this video."
+            }
         }
+    }
+
+    /// Changes the haptics and leaves the video playing.
+    private func replaceEvents(_ new: [HapticEvent]) {
+        events = new
+        if isPlaying { reschedule() }
     }
 
     // MARK: Playback
@@ -218,7 +258,8 @@ final class SoloModel {
         // Park on the exact frame, then release video and haptics at one instant.
         p.seek(to: target, toleranceBefore: .zero, toleranceAfter: .zero) { [weak self] _ in
             Task { @MainActor in
-                guard let self, self.isPlaying else { return }
+                // The seek can end after another video opened. It must not start the old player.
+                guard let self, self.isPlaying, self.player === p else { return }
                 let at = SharedClock.now() + self.lead
                 p.setRate(1, time: target, atHostTime: CMTime(seconds: at, preferredTimescale: 1_000_000))
                 self.schedule(from: start, delay: self.lead)
@@ -252,9 +293,16 @@ final class SoloModel {
         let wait = max(window - 4 + delay, 1)
         windowTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(wait))
-            guard !Task.isCancelled, let self, self.isPlaying, let p = self.player else { return }
-            self.schedule(from: p.currentTime().seconds, delay: 0.05)
+            guard !Task.isCancelled, let self, self.isPlaying else { return }
+            self.reschedule()
         }
+    }
+
+    /// New haptics for a video that is moving. The video moves on during the delay, so they start from where it will be.
+    private func reschedule() {
+        guard let p = player else { return }
+        let delay: TimeInterval = 0.05
+        schedule(from: p.currentTime().seconds + delay, delay: delay)
     }
 
     private func startTicking() {

@@ -30,6 +30,8 @@
 	<array>
 		<string>_feelhaptics._tcp</string>
 	</array>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026 7 Angle.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Feel Player lets phones on your local network join to feel the haptics of a video.</string>
 </dict>

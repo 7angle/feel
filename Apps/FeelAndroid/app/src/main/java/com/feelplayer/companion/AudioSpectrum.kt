@@ -26,11 +26,16 @@ class AudioSpectrum(
     val fluxHigh: FloatArray,
     /** Seconds that hold speech. Empty when none was found or the classifier did not run. */
     val speech: List<ClosedFloatingPointRange<Double>> = emptyList(),
+    /** Peak level 0..1, 100 values per second. */
+    val envelope: FloatArray = FloatArray(0),
 ) {
     val count: Int get() = bass.size
 
     fun withSpeech(ranges: List<ClosedFloatingPointRange<Double>>) =
-        AudioSpectrum(bass, mid, high, fluxBass, fluxMid, fluxHigh, ranges)
+        AudioSpectrum(bass, mid, high, fluxBass, fluxMid, fluxHigh, ranges, envelope)
+
+    fun withEnvelope(peaks: FloatArray) =
+        AudioSpectrum(bass, mid, high, fluxBass, fluxMid, fluxHigh, speech, peaks)
 
     companion object {
         const val RATE = 100.0

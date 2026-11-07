@@ -12,6 +12,7 @@ import android.net.Uri
 import android.util.Log
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import kotlin.math.abs
 
 /** Decodes the sound of a video to 16 kHz mono and measures its spectrum. Runs on the calling thread. */
 object AudioExtractor {
@@ -38,8 +39,10 @@ object AudioExtractor {
 
             val analyzer = SpectrumAnalyzer()
             val detector = SpeechDetector(context).also { speech = it }
+            val meter = PeakMeter()
             val sink: (FloatArray, Int) -> Unit = { samples, n ->
                 analyzer.push(samples, n)
+                meter.push(samples, n)
                 detector.push(samples, n)
             }
             var channels = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
@@ -89,7 +92,7 @@ object AudioExtractor {
             }
             resampler?.finish(sink)
             val result = analyzer.result()
-            return if (result.count > 0) result.withSpeech(detector.finish()) else null
+            return if (result.count > 0) result.withSpeech(detector.finish()).withEnvelope(meter.peaks()) else null
         } catch (e: Exception) {
             Log.w("Feel", "Cannot read audio: ${e.message}")
             return null
@@ -99,6 +102,28 @@ object AudioExtractor {
             extractor.release()
             speech?.close()
         }
+    }
+
+    /** Peak of every 10 ms at 16 kHz. */
+    private class PeakMeter {
+        private var peaks = FloatArray(6000)
+        private var count = 0
+        private var inBucket = 0
+        private var current = 0f
+
+        fun push(samples: FloatArray, n: Int) {
+            for (i in 0 until n) {
+                current = maxOf(current, abs(samples[i]))
+                if (++inBucket == 160) {
+                    if (count == peaks.size) peaks = peaks.copyOf(count * 2)
+                    peaks[count++] = minOf(current, 1f)
+                    inBucket = 0
+                    current = 0f
+                }
+            }
+        }
+
+        fun peaks(): FloatArray = peaks.copyOf(count)
     }
 
     private fun downmix(data: ByteBuffer, encoding: Int, channels: Int, frames: Int, out: FloatArray) {

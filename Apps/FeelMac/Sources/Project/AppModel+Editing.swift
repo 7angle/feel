@@ -156,32 +156,50 @@ extension AppModel {
         project.events[i] = EventEditing.resized(project.events[i], edge: edge, to: time, grid: gridInterval, limit: project.duration)
     }
 
-    // MARK: Auto from audio
+    // MARK: Auto haptics
 
-    var canAutoFromAudio: Bool { videoState == .loaded && waveform.state != .noAudio && !isAutoRunning }
+    var canAutoHaptics: Bool { videoState == .loaded && waveform.state != .noAudio && !isAutoRunning }
 
-    /// Adds events found in the audio. They replace the events of an earlier run, except the ones
-    /// the user edited. Other events stay. One undo step.
-    func autoHapticsFromAudio() {
-        guard canAutoFromAudio, let url = activeVideoURL else { return }
+    /// Adds events found in the audio and the picture. They replace the events of an earlier run,
+    /// except the ones the user edited. Other events stay. One undo step.
+    func autoHaptics() {
+        guard canAutoHaptics, let url = activeVideoURL else { return }
         autoTask?.cancel()
         setAutoRunning(true)
-        let cached = spectrumCache?.url == url ? spectrumCache?.spectrum : nil
+        let cachedSpectrum = spectrumCache?.url == url ? spectrumCache?.spectrum : nil
+        let cachedInput = analysisInput ?? (autoInputCache?.url == url ? autoInputCache?.input : nil)
+        let duration = project.duration
+        let analyzer = analyzer
         autoTask = Task { [weak self] in
-            let spectrum: AudioSpectrum?
-            if let cached { spectrum = cached } else {
-                spectrum = await Task.detached(priority: .userInitiated) { await AudioSpectrumExtractor.extract(url: url) }.value
+            let work = Task.detached(priority: .userInitiated) { () throws -> (AudioSpectrum?, AnalysisInput) in
+                async let spectrum = cachedSpectrum != nil ? cachedSpectrum : AudioSpectrumExtractor.extract(url: url)
+                let input: AnalysisInput
+                if let cachedInput { input = cachedInput } else {
+                    input = try await analyzer.measure(url: url, duration: duration) { p in
+                        Task { @MainActor in self?.setAutoProgress(p) }
+                    }
+                }
+                return (await spectrum, input)
             }
+            let result = await withTaskCancellationHandler { await work.result } onCancel: { work.cancel() }
             guard !Task.isCancelled, let self else { return }
             self.setAutoRunning(false)
+            let spectrum: AudioSpectrum?, input: AnalysisInput
+            do {
+                (spectrum, input) = try result.get()
+            } catch {
+                self.errorMessage = "Cannot read this video. \(error.localizedDescription)"
+                return
+            }
             guard let spectrum else {
                 self.errorMessage = "Cannot read the audio of this video."
                 return
             }
             self.spectrumCache = (url, spectrum)
-            let found = AudioHaptics.generate(spectrum: spectrum, sensitivity: self.sensitivity)
+            self.autoInputCache = (url, input)
+            let found = AutoHaptics.generate(spectrum: spectrum, input: input, sensitivity: self.sensitivity)
             guard !found.isEmpty else {
-                self.errorMessage = "No clear hits in the audio. Raise sensitivity in the Suggestions tab, then try again."
+                self.errorMessage = "No clear moments found. Raise sensitivity in the Suggestions tab, then try again."
                 return
             }
             self.recordUndo()

@@ -48,13 +48,37 @@ final class ExportTests: XCTestCase {
         let dir = try tempDir()
         defer { try? FileManager.default.removeItem(at: dir) }
         let urls = try ExportEngine.write(project(), formats: Set(ExportFormat.allCases), to: dir)
-        XCTAssertEqual(Set(urls.map(\.lastPathComponent)), ["My_Trailer__Cut_1.ahap", "My_Trailer__Cut_1.json", "FeelHapticVideoSync.swift"])
+        XCTAssertEqual(Set(urls.map(\.lastPathComponent)), ["My_Trailer__Cut_1.ahap", "My_Trailer__Cut_1.json", "FeelHapticVideoSync.swift", "FeelHapticVideoSync.kt"])
         let swift = try String(contentsOf: dir.appendingPathComponent("FeelHapticVideoSync.swift"), encoding: .utf8)
         XCTAssertTrue(swift.contains("My_Trailer__Cut_1"))
         XCTAssertFalse(swift.contains("__AHAP_NAME__"))
+        let kotlin = try String(contentsOf: dir.appendingPathComponent("FeelHapticVideoSync.kt"), encoding: .utf8)
+        XCTAssertTrue(kotlin.contains("My_Trailer__Cut_1.json"))
+        XCTAssertFalse(kotlin.contains("__JSON_NAME__"))
         for u in urls where u.pathExtension == "ahap" || u.pathExtension == "json" {
             XCTAssertNoThrow(try JSONSerialization.jsonObject(with: Data(contentsOf: u)))
         }
+    }
+
+    func testKotlinExportWritesTheJSONItNeeds() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let urls = try ExportEngine.write(project(), formats: [.kotlin], to: dir)
+        XCTAssertEqual(Set(urls.map(\.lastPathComponent)), ["My_Trailer__Cut_1.json", "FeelHapticVideoSync.kt"])
+    }
+
+    /// The Android unit tests compile and run this copy of the generated Kotlin.
+    /// Run to update: FEEL_GOLDEN_DIR=Apps/FeelAndroid/app/src/test/resources swift test --filter testKotlinFixtureIsCurrent
+    func testKotlinFixtureIsCurrent() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let fixture = root.appendingPathComponent("Apps/FeelAndroid/app/src/test/java/com/feelplayer/haptics/FeelHapticVideoSync.kt")
+        let source = KotlinPlaybackTemplate.source(jsonName: "share-golden")
+        if ProcessInfo.processInfo.environment["FEEL_GOLDEN_DIR"] != nil {
+            try FileManager.default.createDirectory(at: fixture.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try source.write(to: fixture, atomically: true, encoding: .utf8)
+        }
+        XCTAssertEqual(try String(contentsOf: fixture, encoding: .utf8), source)
     }
 
     func testEmptyProjectBlocksExport() throws {

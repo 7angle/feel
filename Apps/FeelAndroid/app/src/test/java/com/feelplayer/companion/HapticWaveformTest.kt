@@ -16,6 +16,15 @@ class HapticWaveformTest {
     }
 
     @Test
+    fun onOffTimingsMergeStrengthsAndAlternate() {
+        val mixed = HapticWaveform.Result(longArrayOf(100, 50, 30, 20, 40), intArrayOf(0, 200, 90, 0, 255))
+        assertEquals(listOf(100L, 80L, 20L, 40L), HapticWaveform.onOffTimings(mixed).toList())
+        // A waveform that starts on has an off time of zero first.
+        val startsOn = HapticWaveform.Result(longArrayOf(50, 10), intArrayOf(120, 0))
+        assertEquals(listOf(0L, 50L, 10L), HapticWaveform.onOffTimings(startsOn).toList())
+    }
+
+    @Test
     fun tapInsideRumbleHasGapsOnBothSides() {
         val rumble = HapticEvent(type = "rumble", start = 0.0, duration = 1.0, intensity = 0.8)
         val tap = HapticEvent(type = "tap", start = 0.5, intensity = 0.7, sharpness = 0.5)

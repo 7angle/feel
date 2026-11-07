@@ -1,11 +1,12 @@
 Feel Player
-Copyright (C) 2026 MC
+Copyright (C) 2026 7 Angle
 
 Licensed under the GNU Affero General Public License v3.0 or later (see LICENSE).
 
 Trademarks and artwork
-The names "Feel" and "Feel Player", the app icon (Icon.icon, Neon Haptic Audio Icon.png),
-and the com.feelplayer.* bundle IDs are not licensed under the AGPL. All rights reserved.
+The names "Feel", "Feel Editor", and "Feel Player", the app icons (Icon.icon, the Icons directory,
+Assets/Neon Haptic Audio Icon.png), and the com.feelplayer.* bundle IDs are not licensed
+under the AGPL. All rights reserved.
 
 Third-party components
 - YAMNet audio classification model (Apps/FeelAndroid/app/src/main/assets/yamnet.tflite)

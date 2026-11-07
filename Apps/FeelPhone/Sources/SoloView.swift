@@ -9,6 +9,7 @@ import UniformTypeIdentifiers
 /// Connecting to a Mac is an option, not the start.
 struct SoloView: View {
     let connect: CompanionModel
+    @Environment(\.scenePhase) private var phase
     @State private var model = SoloModel()
     @State private var picking = false
     @State private var connecting = false
@@ -57,6 +58,10 @@ struct SoloView: View {
             // The Mac takes over once it is connected.
             if case .connected = link { model.pause() }
         }
+        .onChange(of: phase) { _, new in
+            // No sound and no haptics from an app the user left.
+            if new == .background { model.pause() }
+        }
     }
 
     // MARK: Top bar
@@ -85,7 +90,11 @@ struct SoloView: View {
 
     private var menu: some View {
         Menu {
-            Button { picking = true } label: { Label("Open Video…", systemImage: "film") }
+            Button {
+                // No sound or haptics behind the file picker, or while the next video loads.
+                model.pause()
+                picking = true
+            } label: { Label("Open Video…", systemImage: "film") }
             Button {
                 model.pause()
                 connecting = true

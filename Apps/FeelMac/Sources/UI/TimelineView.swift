@@ -76,7 +76,7 @@ struct TimelineView: View {
 
     @ViewBuilder private func emptyHint(lane: CGFloat) -> some View {
         if model.project.events.isEmpty && model.visibleSuggestions.isEmpty {
-            Text("No haptics yet. Press ⌘1 to add a tap, or use Auto from Audio.")
+            Text("No haptics yet. Press ⌘1 to add a tap, or use Auto Haptics.")
                 .foregroundStyle(Theme.textSecondary)
                 .lineLimit(1)
                 .padding(.leading, 17)
@@ -97,12 +97,12 @@ struct TimelineView: View {
                         .padding(.leading, 12)
                 }
                 Spacer()
-                Button { model.autoHapticsFromAudio() } label: {
-                    Label(model.isAutoRunning ? "Listening…" : "Auto from Audio", systemImage: "waveform.badge.plus")
+                Button { model.autoHaptics() } label: {
+                    Label(model.isAutoRunning ? "Analyzing \(Int(model.autoProgress * 100))%" : "Auto Haptics", systemImage: "waveform.badge.plus")
                 }
                 .buttonStyle(QuietButtonStyle())
-                .disabled(!model.canAutoFromAudio)
-                .help("Add haptics at hits and loud parts of the audio")
+                .disabled(!model.canAutoHaptics)
+                .help("Add haptics where the audio and the picture have strong moments")
                 IconButton(symbol: "trash", label: "Delete selected haptics (⌫)") { model.deleteSelection() }
                     .disabled(model.selection.isEmpty)
                 Divider().frame(height: 14).padding(.horizontal, 6)

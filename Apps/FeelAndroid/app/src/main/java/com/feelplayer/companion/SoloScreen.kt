@@ -46,6 +46,12 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -128,7 +134,11 @@ fun SoloScreen(model: SoloModel, connect: CompanionModel, onConnect: () -> Unit)
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) model.open(uri)
     }
-    val openFile = { pick.launch(arrayOf("video/*", "application/json", "application/octet-stream")) }
+    val openFile = {
+        // No sound or haptics behind the file picker. onStop comes too late, or not at all in split screen.
+        model.pause()
+        pick.launch(arrayOf("video/*", "application/json", "application/octet-stream"))
+    }
     val player = model.player
     if (player != null) {
         SoloVideo(model, player, connect, openFile, onConnect)
@@ -238,6 +248,12 @@ private fun AboutDialog(onDismiss: () -> Unit) {
                 Text("Videos stay on your device. Feel makes haptics from the sound on your device.")
                 Text("The camera scans the QR code on your Mac. The image is not saved or sent.")
                 Text("The local network link goes only to your own Mac. It is encrypted.")
+                Text("License", fontWeight = FontWeight.SemiBold)
+                Text("Copyright © 2026 7 Angle.")
+                Text("Feel is free software under the GNU AGPL 3.0 or later.")
+                Text("The AGPL does not apply to the Feel names and icons. All rights reserved.")
+                AboutLink("View the source code on GitHub", "https://github.com/mcnaveen/feel")
+                AboutLink("Read the license", "https://github.com/mcnaveen/feel/blob/main/LICENSE")
                 Text("Open-source licenses", fontWeight = FontWeight.SemiBold)
                 Text(
                     "AndroidX and Jetpack Compose, Media3, LiteRT: Apache License 2.0, The Android Open Source Project and Google.\n" +
@@ -245,9 +261,18 @@ private fun AboutDialog(onDismiss: () -> Unit) {
                         "Bouncy Castle: MIT License, The Legion of the Bouncy Castle Inc.\n" +
                         "Google code scanner: Google Play services terms.",
                 )
+                Text("Version", fontWeight = FontWeight.SemiBold)
+                val context = LocalContext.current
+                Text(context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty())
             }
         },
     )
+}
+
+@Composable
+private fun AboutLink(label: String, url: String) {
+    val style = TextLinkStyles(SpanStyle(textDecoration = TextDecoration.Underline))
+    Text(buildAnnotatedString { withLink(LinkAnnotation.Url(url, style)) { append(label) } })
 }
 
 @Composable

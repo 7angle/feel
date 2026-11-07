@@ -15,13 +15,14 @@ public struct ExportIssue: Equatable, Sendable {
 }
 
 public enum ExportFormat: String, CaseIterable, Sendable {
-    case ahap, json, swift
+    case ahap, json, swift, kotlin
 
     public var title: String {
         switch self {
         case .ahap: "AHAP"
         case .json: "JSON"
         case .swift: "Swift playback code"
+        case .kotlin: "Kotlin playback code"
         }
     }
 }
@@ -144,8 +145,9 @@ public enum ExportEngine {
             written.append(url)
         }
         if formats.contains(.ahap) || formats.contains(.swift) { try put(try ahap(project), "\(stem).ahap") }
-        if formats.contains(.json) { try put(try json(project), "\(stem).json") }
+        if formats.contains(.json) || formats.contains(.kotlin) { try put(try json(project), "\(stem).json") }
         if formats.contains(.swift) { try put(Data(SwiftPlaybackTemplate.source(ahapName: stem).utf8), "FeelHapticVideoSync.swift") }
+        if formats.contains(.kotlin) { try put(Data(KotlinPlaybackTemplate.source(jsonName: stem).utf8), "FeelHapticVideoSync.kt") }
         return written
     }
 }

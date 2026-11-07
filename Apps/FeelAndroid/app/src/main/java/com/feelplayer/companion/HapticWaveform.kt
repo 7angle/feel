@@ -89,6 +89,23 @@ object HapticWaveform {
         return Result(timings.toLongArray(), amps.toIntArray())
     }
 
+    /** For a motor with no amplitude control. The result alternates off, on, off, and starts with off. */
+    fun onOffTimings(wave: Result): LongArray {
+        val out = ArrayList<Long>()
+        out.add(0L)
+        var on = false
+        for (i in wave.timings.indices) {
+            val pieceOn = wave.amplitudes[i] > 0
+            if (pieceOn == on) {
+                out[out.size - 1] = out.last() + wave.timings[i]
+            } else {
+                out.add(wave.timings[i])
+                on = pieceOn
+            }
+        }
+        return out.toLongArray()
+    }
+
     /** 0...1 to motor amplitude 1...255. Weak values do not move the motor, so lift them. */
     fun level(v: Double, floor: Int = 60): Int =
         if (v <= 0.0) 0 else (floor + (255 - floor) * v.coerceIn(0.0, 1.0).pow(0.8)).roundToInt().coerceIn(1, 255)

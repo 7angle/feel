@@ -12,7 +12,7 @@ Feel Player does not collect your data. It has no account, no analytics, no adve
 
 | Data | Use | Where it goes |
 | --- | --- | --- |
-| Videos you open | Play the video. Analyze the sound to make haptics. | Stays on your device. Never uploaded. |
+| Videos you open | Play the video. Analyze the sound and picture to make haptics. | Stays on your device. Never uploaded. |
 | Haptics and project files | Save and share your haptic work. | Stays on your device, or in the place you choose to save it. |
 | Camera (iPhone, Android) | Scan the QR code shown on your Mac to join it. | Image is processed on the device. It is not saved or sent. |
 | Local network | Find your Mac and sync haptics to your phone. | Sent only between your own devices on your local network. Encrypted with TLS. |
