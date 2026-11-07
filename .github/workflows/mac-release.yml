@@ -49,7 +49,7 @@ jobs:
               -derivedDataPath "$RUNNER_TEMP/dd" \
               MARKETING_VERSION="$VN" CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
               CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Developer ID Application" \
-              DEVELOPMENT_TEAM="$TEAM_ID" OTHER_CODE_SIGN_FLAGS="--timestamp" \
+              DEVELOPMENT_TEAM="$TEAM_ID" OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
               build
             mkdir -p dist
             cp -R "$RUNNER_TEMP/dd/Build/Products/Release/$name.app" dist/
@@ -67,7 +67,13 @@ jobs:
             slug="$(echo "$app" | tr 'A-Z ' 'a-z-')"
             ditto -c -k --keepParent "$app.app" "$RUNNER_TEMP/$slug.zip"
             xcrun notarytool submit "$RUNNER_TEMP/$slug.zip" --key "$RUNNER_TEMP/key.p8" \
-              --key-id "$API_KEY_ID" --issuer "$API_ISSUER" --wait
+              --key-id "$API_KEY_ID" --issuer "$API_ISSUER" --wait --output-format json > "$RUNNER_TEMP/notary.json"
+            cat "$RUNNER_TEMP/notary.json"
+            if ! grep -q '"status" *: *"Accepted"' "$RUNNER_TEMP/notary.json"; then
+              ID=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['id'])" "$RUNNER_TEMP/notary.json")
+              xcrun notarytool log "$ID" --key "$RUNNER_TEMP/key.p8" --key-id "$API_KEY_ID" --issuer "$API_ISSUER"
+              exit 1
+            fi
             xcrun stapler staple "$app.app"
             hdiutil create -volname "$app" -srcfolder "$app.app" -ov -format UDZO "$slug-$VN.dmg"
             shasum -a 256 "$slug-$VN.dmg" > "$slug-$VN.dmg.sha256"
