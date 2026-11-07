@@ -13,12 +13,27 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = (project.findProperty("versionName") as String?) ?: "1.0.0"
+    }
+
+    signingConfigs {
+        create("release") {
+            val path = System.getenv("FEEL_KEYSTORE")
+            if (path != null) {
+                storeFile = file(path)
+                storePassword = System.getenv("FEEL_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("FEEL_KEY_ALIAS")
+                keyPassword = System.getenv("FEEL_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            if (System.getenv("FEEL_KEYSTORE") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {

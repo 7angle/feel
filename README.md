@@ -47,6 +47,8 @@
 | **Feel for iPhone** | Plays haptics with Core Haptics. | iOS 17 | `Apps/FeelPhone` |
 | **Feel for Android** | Plays haptics with the device vibrator. | Android 8.0 (API 26) | `Apps/FeelAndroid` |
 
+Install Feel for Android from [GitHub Releases](https://github.com/7angle/feel/releases) with [Obtainium](docs/android-release.md).
+
 The Apple apps share the Swift package in `Packages/FeelCore`. This package contains the models, timebase, presets, export engine, and network protocol.
 
 ## Usage
@@ -80,10 +82,10 @@ The Apple apps share the Swift package in `Packages/FeelCore`. This package cont
 
 ## Contributing
 
-Do not commit videos. Do not commit projects that you made from copyrighted media.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and agree to the [CLA](CLA.md). Do not commit videos. Do not commit projects that you made from copyrighted media.
 
 ## License
 
-This project has the AGPL-3.0-or-later license. For more data, refer to [LICENSE](LICENSE) and [NOTICE](NOTICE).
+This project has the AGPL-3.0-or-later license. For more data, refer to [LICENSE](LICENSE), [NOTICE](NOTICE), and the [terms of use](TERMS.md).
 
 The AGPL does not apply to the "Feel", "Feel Editor", and "Feel Player" names, the app icons, or the bundle IDs. These items belong to 7 Angle. If you fork this project, you must use a different name, different icons, and different bundle IDs.

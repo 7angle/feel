@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-07
 
-Applies to: Feel Player (Mac), Feel Editor (Mac), Feel (iPhone), Feel (Android).
+Applies to: Feel Player (Mac), Feel Editor (Mac), Feel (iPhone), Feel (Android). The Android app is released on GitHub and installed with Obtainium or by hand. It is not on Google Play.
 
 ## Summary
 
@@ -40,4 +40,4 @@ If this policy changes, the new version will show a new date at the top of this 
 
 ## Contact
 
-7 Angle — [add contact email before publishing]
+7 Angle — feel@7angle.com
