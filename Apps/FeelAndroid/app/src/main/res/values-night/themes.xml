@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Feel" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#131211</item>
+        <item name="android:statusBarColor">#131211</item>
+        <item name="android:navigationBarColor">#131211</item>
+    </style>
+</resources>

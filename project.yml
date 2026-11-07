@@ -1,0 +1,116 @@
+name: Feel
+options:
+  bundleIdPrefix: com.feelplayer
+  deploymentTarget:
+    macOS: "14.0"
+    iOS: "17.0"
+  createIntermediateGroups: true
+packages:
+  FeelCore:
+    path: Packages/FeelCore
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    DEVELOPMENT_TEAM: ""  # set your Apple team ID
+    CODE_SIGN_STYLE: Automatic
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  FeelMac:
+    type: application
+    platform: macOS
+    sources: [Apps/FeelMac/Sources, Apps/Shared/Mac, Apps/Shared/Privacy, Icon.icon]
+    dependencies:
+      - package: FeelCore
+    info:
+      path: Apps/FeelMac/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Feel Editor
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        LSApplicationCategoryType: public.app-category.developer-tools
+        LSMinimumSystemVersion: "14.0"
+        NSLocalNetworkUsageDescription: Feel lets phones on your local network join to preview haptics.
+        NSBonjourServices: ["_feelhaptics._tcp"]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Feel Project
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSItemContentTypes: [com.feelplayer.project]
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: com.feelplayer.project
+            UTTypeDescription: Feel Project
+            UTTypeConformsTo: [public.json, public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [feelproj]
+    entitlements:
+      path: Apps/FeelMac/Resources/FeelMac.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-write: true
+        com.apple.security.files.bookmarks.app-scope: true
+        com.apple.security.network.client: true
+        com.apple.security.network.server: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.feelplayer.mac
+        ASSETCATALOG_COMPILER_APPICON_NAME: Icon
+        ENABLE_HARDENED_RUNTIME: YES
+        GENERATE_INFOPLIST_FILE: NO
+  FeelPlayerMac:
+    type: application
+    platform: macOS
+    sources: [Apps/FeelPlayer/Sources, Apps/Shared/Mac, Apps/Shared/Privacy, Icon.icon]
+    dependencies:
+      - package: FeelCore
+    info:
+      path: Apps/FeelPlayer/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Feel Player
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        LSMinimumSystemVersion: "14.0"
+        LSApplicationCategoryType: public.app-category.entertainment
+        NSLocalNetworkUsageDescription: Feel Player lets phones on your local network join to feel the haptics of a video.
+        NSBonjourServices: ["_feelhaptics._tcp"]
+    entitlements:
+      path: Apps/FeelPlayer/Resources/FeelPlayer.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+        com.apple.security.network.client: true
+        com.apple.security.network.server: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.feelplayer.player
+        ASSETCATALOG_COMPILER_APPICON_NAME: Icon
+        PRODUCT_NAME: Feel Player
+        ENABLE_HARDENED_RUNTIME: YES
+        GENERATE_INFOPLIST_FILE: NO
+  FeelPhone:
+    type: application
+    platform: iOS
+    sources: [Apps/FeelPhone/Sources, Apps/Shared/Privacy, Icon.icon]
+    dependencies:
+      - package: FeelCore
+    info:
+      path: Apps/FeelPhone/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Feel
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UIRequiredDeviceCapabilities: [iphone-ipad-minimum-performance-a12]
+        NSCameraUsageDescription: Feel scans the QR code on your Mac to join it.
+        NSLocalNetworkUsageDescription: Feel connects to the Feel editor on your Mac over the local network to preview haptics.
+        NSBonjourServices: ["_feelhaptics._tcp"]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.feelplayer.phone
+        ASSETCATALOG_COMPILER_APPICON_NAME: Icon
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO

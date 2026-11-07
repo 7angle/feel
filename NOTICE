@@ -1,0 +1,20 @@
+Feel Player
+Copyright (C) 2026 MC
+
+Licensed under the GNU Affero General Public License v3.0 or later (see LICENSE).
+
+Trademarks and artwork
+The names "Feel" and "Feel Player", the app icon (Icon.icon, Neon Haptic Audio Icon.png),
+and the com.feelplayer.* bundle IDs are not licensed under the AGPL. All rights reserved.
+
+Third-party components
+- YAMNet audio classification model (Apps/FeelAndroid/app/src/main/assets/yamnet.tflite)
+  Copyright Google LLC. Apache License 2.0. https://www.kaggle.com/models/google/yamnet
+- AndroidX Compose, Activity Compose, Media3 (ExoPlayer, UI)
+  Copyright The Android Open Source Project. Apache License 2.0.
+- LiteRT (com.google.ai.edge.litert)
+  Copyright Google LLC. Apache License 2.0.
+- Google Play services Code Scanner
+  Subject to the Google APIs / Play services terms.
+- Bouncy Castle (bctls-jdk18on, bcprov-jdk18on)
+  Copyright The Legion of the Bouncy Castle Inc. MIT License. https://www.bouncycastle.org/licence.html

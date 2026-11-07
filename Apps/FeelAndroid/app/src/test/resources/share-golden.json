@@ -1,0 +1,282 @@
+{
+  "events" : [
+    {
+      "duration" : 0,
+      "fadeIn" : 0,
+      "fadeOut" : 0,
+      "id" : "66797D30-C362-40CB-A7DF-B446B379652B",
+      "intensity" : 0.9,
+      "intensityCurve" : [
+
+      ],
+      "presetID" : "heartbeat",
+      "presetName" : "Heartbeat",
+      "repetitionCount" : 1,
+      "repetitionInterval" : 0.1,
+      "sharpness" : 0.2,
+      "sharpnessCurve" : [
+
+      ],
+      "start" : 2,
+      "type" : "tap"
+    },
+    {
+      "duration" : 0,
+      "fadeIn" : 0,
+      "fadeOut" : 0,
+      "id" : "C372B38F-AE8D-4267-A78D-DDD893EB83A3",
+      "intensity" : 0.6,
+      "intensityCurve" : [
+
+      ],
+      "presetID" : "heartbeat",
+      "presetName" : "Heartbeat",
+      "repetitionCount" : 1,
+      "repetitionInterval" : 0.1,
+      "sharpness" : 0.2,
+      "sharpnessCurve" : [
+
+      ],
+      "start" : 2.15,
+      "type" : "tap"
+    },
+    {
+      "duration" : 0,
+      "fadeIn" : 0,
+      "fadeOut" : 0,
+      "id" : "4CEAA52B-9197-4608-8330-ED0A3A6C4721",
+      "intensity" : 0.9,
+      "intensityCurve" : [
+
+      ],
+      "presetID" : "heartbeat",
+      "presetName" : "Heartbeat",
+      "repetitionCount" : 1,
+      "repetitionInterval" : 0.1,
+      "sharpness" : 0.2,
+      "sharpnessCurve" : [
+
+      ],
+      "start" : 2.8,
+      "type" : "tap"
+    },
+    {
+      "duration" : 0,
+      "fadeIn" : 0,
+      "fadeOut" : 0,
+      "id" : "27052DE5-4742-4075-B231-EC2A241CF4AA",
+      "intensity" : 0.6,
+      "intensityCurve" : [
+
+      ],
+      "presetID" : "heartbeat",
+      "presetName" : "Heartbeat",
+      "repetitionCount" : 1,
+      "repetitionInterval" : 0.1,
+      "sharpness" : 0.2,
+      "sharpnessCurve" : [
+
+      ],
+      "start" : 2.95,
+      "type" : "tap"
+    },
+    {
+      "duration" : 0,
+      "fadeIn" : 0,
+      "fadeOut" : 0,
+      "id" : "3C2C6D56-CF27-4B74-B27D-477CAEF2E48B",
+      "intensity" : 1,
+      "intensityCurve" : [
+
+      ],
+      "presetID" : "explosion",
+      "presetName" : "Explosion",
+      "repetitionCount" : 1,
+      "repetitionInterval" : 0.1,
+      "sharpness" : 0.9,
+      "sharpnessCurve" : [
+
+      ],
+      "start" : 8,
+      "type" : "tap"
+    },
+    {
+      "duration" : 1,
+      "fadeIn" : 0,
+      "fadeOut" : 0.9,
+      "id" : "6E976940-9B5F-4DC2-A555-63D64749B5EB",
+      "intensity" : 1,
+      "intensityCurve" : [
+        {
+          "time" : 0,
+          "value" : 1
+        },
+        {
+          "time" : 0.3,
+          "value" : 0.6
+        },
+        {
+          "time" : 1,
+          "value" : 0
+        }
+      ],
+      "presetID" : "explosion",
+      "presetName" : "Explosion",
+      "repetitionCount" : 1,
+      "repetitionInterval" : 0.1,
+      "sharpness" : 0.2,
+      "sharpnessCurve" : [
+
+      ],
+      "start" : 8.02,
+      "type" : "rumble"
+    }
+  ],
+  "exported" : "2027-01-15T08:00:00Z",
+  "format" : "feel-haptics",
+  "presets" : [
+    {
+      "events" : [
+        {
+          "duration" : 0,
+          "fadeIn" : 0,
+          "fadeOut" : 0,
+          "id" : "900F4B94-7EBE-4153-8793-5792D37FFF29",
+          "intensity" : 1,
+          "intensityCurve" : [
+
+          ],
+          "repetitionCount" : 1,
+          "repetitionInterval" : 0.1,
+          "sharpness" : 0.9,
+          "sharpnessCurve" : [
+
+          ],
+          "start" : 0,
+          "type" : "tap"
+        },
+        {
+          "duration" : 1,
+          "fadeIn" : 0,
+          "fadeOut" : 0.9,
+          "id" : "7C61E7EA-0E18-45A4-950C-4CF92AD8035B",
+          "intensity" : 1,
+          "intensityCurve" : [
+            {
+              "time" : 0,
+              "value" : 1
+            },
+            {
+              "time" : 0.3,
+              "value" : 0.6
+            },
+            {
+              "time" : 1,
+              "value" : 0
+            }
+          ],
+          "repetitionCount" : 1,
+          "repetitionInterval" : 0.1,
+          "sharpness" : 0.2,
+          "sharpnessCurve" : [
+
+          ],
+          "start" : 0.02,
+          "type" : "rumble"
+        }
+      ],
+      "id" : "explosion",
+      "isBuiltIn" : true,
+      "name" : "Explosion"
+    },
+    {
+      "events" : [
+        {
+          "duration" : 0,
+          "fadeIn" : 0,
+          "fadeOut" : 0,
+          "id" : "144F0EF6-8C16-4462-8E62-05AFF1CE86CB",
+          "intensity" : 0.9,
+          "intensityCurve" : [
+
+          ],
+          "repetitionCount" : 1,
+          "repetitionInterval" : 0.1,
+          "sharpness" : 0.2,
+          "sharpnessCurve" : [
+
+          ],
+          "start" : 0,
+          "type" : "tap"
+        },
+        {
+          "duration" : 0,
+          "fadeIn" : 0,
+          "fadeOut" : 0,
+          "id" : "D296C217-520C-49AA-8FD9-989CF908BE37",
+          "intensity" : 0.6,
+          "intensityCurve" : [
+
+          ],
+          "repetitionCount" : 1,
+          "repetitionInterval" : 0.1,
+          "sharpness" : 0.2,
+          "sharpnessCurve" : [
+
+          ],
+          "start" : 0.15,
+          "type" : "tap"
+        },
+        {
+          "duration" : 0,
+          "fadeIn" : 0,
+          "fadeOut" : 0,
+          "id" : "4265F6D5-E550-4BD4-912A-683A661EB3D8",
+          "intensity" : 0.9,
+          "intensityCurve" : [
+
+          ],
+          "repetitionCount" : 1,
+          "repetitionInterval" : 0.1,
+          "sharpness" : 0.2,
+          "sharpnessCurve" : [
+
+          ],
+          "start" : 0.8,
+          "type" : "tap"
+        },
+        {
+          "duration" : 0,
+          "fadeIn" : 0,
+          "fadeOut" : 0,
+          "id" : "ECB82A94-BF9F-4BC2-88D9-D9BB70AED472",
+          "intensity" : 0.6,
+          "intensityCurve" : [
+
+          ],
+          "repetitionCount" : 1,
+          "repetitionInterval" : 0.1,
+          "sharpness" : 0.2,
+          "sharpnessCurve" : [
+
+          ],
+          "start" : 0.95,
+          "type" : "tap"
+        }
+      ],
+      "id" : "heartbeat",
+      "isBuiltIn" : true,
+      "name" : "Heartbeat"
+    }
+  ],
+  "projectName" : "Clip",
+  "timelineDuration" : 20,
+  "version" : 1,
+  "video" : {
+    "duration" : 20,
+    "fileName" : "clip.mp4",
+    "frameRate" : 24,
+    "height" : 1080,
+    "width" : 1920
+  }
+}

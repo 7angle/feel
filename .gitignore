@@ -1,0 +1,16 @@
+.DS_Store
+.build/
+*.xcodeproj/xcuserdata/
+DerivedData/
+*.xcodeproj
+*.mp4
+Demo/
+local.properties
+.gradle/
+Apps/FeelAndroid/build/
+Apps/FeelAndroid/app/build/
+xcuserdata/
+*.webm
+*.mov
+*.m4v
+MEMORY.md
