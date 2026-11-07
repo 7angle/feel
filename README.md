@@ -47,7 +47,7 @@
 | **Feel for iPhone** | Plays haptics with Core Haptics. | iOS 17 | `Apps/FeelPhone` |
 | **Feel for Android** | Plays haptics with the device vibrator. | Android 8.0 (API 26) | `Apps/FeelAndroid` |
 
-Install Feel for Android from [GitHub Releases](https://github.com/7angle/feel/releases) with [Obtainium](docs/android-release.md).
+Install Feel Editor and Feel Player from [GitHub Releases](https://github.com/7angle/feel/releases) ([notes](docs/mac-release.md)). Install Feel for Android from [GitHub Releases](https://github.com/7angle/feel/releases) with [Obtainium](docs/android-release.md).
 
 The Apple apps share the Swift package in `Packages/FeelCore`. This package contains the models, timebase, presets, export engine, and network protocol.
 

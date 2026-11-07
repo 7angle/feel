@@ -1,0 +1,82 @@
+name: Mac release
+
+on:
+  push:
+    tags: ["mac-v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-15
+    env:
+      VERSION_NAME: ${{ github.ref_type == 'tag' && github.ref_name || 'mac-v0.0.0-dev' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install xcodegen
+        run: brew install xcodegen
+      - name: Generate project
+        run: xcodegen generate
+      - name: Import signing certificate
+        env:
+          CERT_P12_BASE64: ${{ secrets.MAC_CERT_P12_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
+        run: |
+          KC="$RUNNER_TEMP/build.keychain-db"
+          KCPASS="$(uuidgen)"
+          echo "$CERT_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security create-keychain -p "$KCPASS" "$KC"
+          security set-keychain-settings -lut 21600 "$KC"
+          security unlock-keychain -p "$KCPASS" "$KC"
+          security import "$RUNNER_TEMP/cert.p12" -k "$KC" -P "$CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KCPASS" "$KC"
+          security list-keychains -d user -s "$KC" login.keychain-db
+      - name: Build apps
+        env:
+          TEAM_ID: ${{ secrets.MAC_TEAM_ID }}
+        run: |
+          VN="${VERSION_NAME#mac-v}"
+          for pair in "FeelEditor:Feel Editor" "FeelPlayer:Feel Player"; do
+            scheme="${pair%%:*}"; name="${pair#*:}"
+            xcodebuild -project Feel.xcodeproj -scheme "$scheme" -configuration Release \
+              -derivedDataPath "$RUNNER_TEMP/dd" \
+              MARKETING_VERSION="$VN" CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+              CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Developer ID Application" \
+              DEVELOPMENT_TEAM="$TEAM_ID" OTHER_CODE_SIGN_FLAGS="--timestamp" \
+              build
+            mkdir -p dist
+            cp -R "$RUNNER_TEMP/dd/Build/Products/Release/$name.app" dist/
+          done
+      - name: Notarize, staple, and make DMGs
+        env:
+          API_KEY_P8: ${{ secrets.MAC_NOTARY_KEY_P8 }}
+          API_KEY_ID: ${{ secrets.MAC_NOTARY_KEY_ID }}
+          API_ISSUER: ${{ secrets.MAC_NOTARY_ISSUER_ID }}
+        run: |
+          VN="${VERSION_NAME#mac-v}"
+          echo "$API_KEY_P8" > "$RUNNER_TEMP/key.p8"
+          cd dist
+          for app in "Feel Editor" "Feel Player"; do
+            slug="$(echo "$app" | tr 'A-Z ' 'a-z-')"
+            ditto -c -k --keepParent "$app.app" "$RUNNER_TEMP/$slug.zip"
+            xcrun notarytool submit "$RUNNER_TEMP/$slug.zip" --key "$RUNNER_TEMP/key.p8" \
+              --key-id "$API_KEY_ID" --issuer "$API_ISSUER" --wait
+            xcrun stapler staple "$app.app"
+            hdiutil create -volname "$app" -srcfolder "$app.app" -ov -format UDZO "$slug-$VN.dmg"
+            shasum -a 256 "$slug-$VN.dmg" > "$slug-$VN.dmg.sha256"
+          done
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.dmg
+            dist/*.sha256
+          generate_release_notes: true
+      - uses: actions/upload-artifact@v4
+        if: github.ref_type != 'tag'
+        with:
+          name: feel-mac
+          path: dist/*.dmg

@@ -1,27 +1,10 @@
 # App Store metadata
 
-Use for both apps. Limits: name 30, subtitle 30, keywords 100, promo text 170, description 4000.
+Use for Feel (iPhone) only. Limits: name 30, subtitle 30, keywords 100, promo text 170, description 4000.
 
 ## Feel Player (Mac)
 
-- Bundle ID: com.feelplayer.player
-- Category: Entertainment (secondary: Utilities)
-- Name: Feel Player
-- Subtitle: Feel your videos on your phone
-- Keywords: haptic,haptics,vibration,video,player,sync,iphone,android,touch,feel,motion
-- Promo text: Play a video on your Mac. Your phones vibrate with it. No account. No ads. No tracking.
-- Description:
-  Feel Player plays a video on your Mac and sends haptics to phones on your local network. Hold a phone and feel the video.
-
-  - Play a video from your Mac.
-  - Join many phones at the same time. Scan the QR code with Feel for iPhone or Feel for Android.
-  - The connection is encrypted and stays on your local network.
-  - No account. No ads. No tracking.
-
-  Make haptics with Feel Editor (free, open source). Feel Player plays the result.
-- Copyright: 2026 7 Angle
-- Age rating: 4+ (no objectionable content; user opens own video)
-- Price: Free
+Not on the App Store. Ships on GitHub Releases. See docs/mac-release.md.
 
 ## Feel (iPhone)
 
@@ -51,7 +34,6 @@ Use for both apps. Limits: name 30, subtitle 30, keywords 100, promo text 170, d
 
 ## App Privacy (App Store Connect)
 
-- Feel Player (Mac): Data Not Collected.
 - Feel (iPhone): feedback is optional and sent to FeedbackJar only on Send. Answer in App Store Connect:
   - Data types: Other User Content (feedback text), Device ID is not used. Email/Name only if typed (Contact Info).
   - Purpose: App Functionality. Linked to identity: No unless user types email. Tracking: No.
@@ -75,12 +57,10 @@ If no iPhone is at hand, the Mac app plays video and shows the QR code without a
 
 ## Screenshots needed
 
-- Mac: 1280x800 or larger (at least 1, up to 10). Show player + QR code panel.
 - iPhone: 6.9" (1320x2868) and 6.5". Show join, playing, and haptic view.
 
 ## Before submit
 
 - Set DEVELOPMENT_TEAM in project.yml. Bump CURRENT_PROJECT_VERSION for each upload.
 - Run `bash ~/.claude/hooks/app-store-compliance-guard.sh .`
-- Mac Player: archive with sandbox + hardened runtime (already set). Upload with Xcode Organizer.
 - Note on AGPL: 7 Angle owns the copyright, so it may ship under App Store terms. Outside Contributions need the CLA (CLA.md).
